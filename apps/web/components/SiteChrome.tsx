@@ -13,6 +13,8 @@ const NAV = [
   { href: "/about/", label: "How it works" },
 ];
 
+const DOCS_URL = "https://plimsoll-protocol.gitbook.io/plimsoll-protocol-docs/";
+
 export function Header() {
   const path = usePathname();
   return (
@@ -33,6 +35,9 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <a href={DOCS_URL} target="_blank" rel="noreferrer">
+            Docs
+          </a>
         </nav>
       </div>
     </header>
@@ -45,6 +50,9 @@ export function Footer() {
       <div className="wrap">
         <span>Plimsoll — reserve coverage for Stellar-issued assets. Unaudited software on {config.networkName}.</span>
         <span className="row">
+          <a href={DOCS_URL} target="_blank" rel="noreferrer">
+            Docs
+          </a>
           <a href={explorer.contract(config.network.coverageLedgerId)} target="_blank" rel="noreferrer">
             Coverage ledger
           </a>
