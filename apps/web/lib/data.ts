@@ -50,7 +50,15 @@ export interface AssetView {
 }
 
 export const contracts = new PlimsollContracts(config.network);
-export const indexer = config.indexerUrl ? new IndexerClient(config.indexerUrl) : null;
+// A sleeping free-tier indexer can take a minute to wake; fall back to the
+// chain rather than leave the page loading.
+const INDEXER_TIMEOUT_MS = 8_000;
+const fetchWithTimeout: typeof fetch = (input, init) =>
+  fetch(input, { ...init, signal: AbortSignal.timeout(INDEXER_TIMEOUT_MS) });
+
+export const indexer = config.indexerUrl
+  ? new IndexerClient(config.indexerUrl, fetchWithTimeout)
+  : null;
 
 const secs = (iso: string) => Math.floor(new Date(iso).getTime() / 1000);
 

@@ -27,7 +27,9 @@ export const config: AppConfig = {
     reporterRegistryId: env(process.env.NEXT_PUBLIC_REPORTER_REGISTRY_ID, TESTNET.reporterRegistryId),
   },
   networkName: env(process.env.NEXT_PUBLIC_NETWORK_NAME, "testnet"),
-  indexerUrl: env(process.env.NEXT_PUBLIC_INDEXER_URL, ""),
+  indexerUrl: ((url) => (url === "none" ? "" : url))(
+    env(process.env.NEXT_PUBLIC_INDEXER_URL, "https://plimsoll-indexer.onrender.com"),
+  ),
   chainAssets: env(
     process.env.NEXT_PUBLIC_CHAIN_ASSETS,
     Object.values(TESTNET.assets)
