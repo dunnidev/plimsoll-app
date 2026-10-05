@@ -12,7 +12,7 @@ Baked in at build time. All optional.
 | `NEXT_PUBLIC_NETWORK_NAME` | `testnet` | Header label and wallet check message |
 | `NEXT_PUBLIC_COVERAGE_LEDGER_ID` | `CC2QQ7R4…MN4D` | coverage-ledger |
 | `NEXT_PUBLIC_REPORTER_REGISTRY_ID` | `CCZCBR7M…7GOB` | reporter-registry |
-| `NEXT_PUBLIC_INDEXER_URL` | empty | Indexer base URL; empty = chain only |
+| `NEXT_PUBLIC_INDEXER_URL` | `https://plimsoll-indexer.onrender.com` | Indexer base URL; `none` = chain only. Requests time out after 8 s and fall back to the chain. |
 | `NEXT_PUBLIC_CHAIN_ASSETS` | PUSD and USDC SACs | Comma-separated SACs shown in chain-only mode |
 | `NEXT_PUBLIC_EXPLORER_URL` | `https://stellar.expert/explorer/testnet` | Explorer links |
 | `NEXT_PUBLIC_BASE_PATH` | empty | URL prefix, e.g. `/plimsoll-app` on GitHub Pages |
