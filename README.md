@@ -7,6 +7,7 @@
   <a href="https://plimsoll-protocol.github.io/plimsoll-app/"><img src="https://img.shields.io/badge/live-testnet-c8341f" alt="Live on testnet" /></a>
   <img src="https://img.shields.io/badge/next.js-16-0f1d2b" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/stellar--sdk-17.2.1-0f1d2b" alt="stellar-sdk 17" />
+  <a href="https://plimsoll-protocol.gitbook.io/plimsoll-protocol-docs/"><img src="https://img.shields.io/badge/docs-gitbook-0f1d2b" alt="Docs" /></a>
   <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0" />
 </p>
 
@@ -17,7 +18,8 @@ see how much of every Stellar-issued asset is backed, who signed the reserve
 figure, and how old it is. Issuers and auditors post reports from here;
 anyone can list an asset.
 
-**Live:** https://plimsoll-protocol.github.io/plimsoll-app/
+**Live:** https://plimsoll-protocol.github.io/plimsoll-app/  
+**Docs:** https://plimsoll-protocol.gitbook.io/plimsoll-protocol-docs/
 
 | Repo | What it is |
 | --- | --- |
