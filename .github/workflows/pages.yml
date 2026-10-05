@@ -43,3 +43,21 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the live site serves every page
+        run: |
+          base="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          for path in "" "asset/" "report/" "list/" "integrate/" "about/"; do
+            for i in 1 2 3 4 5 6; do
+              code=$(curl -s -o page.html -w '%{http_code}' "$base/$path")
+              [ "$code" = 200 ] && break
+              sleep 10
+            done
+            echo "$code $base/$path"
+            [ "$code" = 200 ] || exit 1
+            grep -q "Plimsoll" page.html || { echo "missing content"; exit 1; }
+          done
