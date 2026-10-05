@@ -7,6 +7,7 @@ import { PlimsollMark } from "./ui";
 
 const NAV = [
   { href: "/", label: "Assets" },
+  { href: "/mainnet/", label: "Mainnet watch" },
   { href: "/report/", label: "Post a report" },
   { href: "/list/", label: "List an asset" },
   { href: "/integrate/", label: "Integrate" },
