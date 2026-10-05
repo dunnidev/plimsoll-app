@@ -1,0 +1,14 @@
+# GitBook site-wide Git Sync reads this file from the repository root.
+# One space, served from docs/. GitBook matches the space by its key:
+# keep the key stable once the site is live (rename with title, move with path).
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: Plimsoll
+  structure:
+    - type: space
+      key: plimsoll-docs
+      title: Plimsoll documentation
+      path: docs
+      default: true
+      content:
+        directory: ./docs
