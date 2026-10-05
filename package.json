@@ -1,0 +1,18 @@
+{
+  "name": "plimsoll-app",
+  "private": true,
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "npm run build -w @plimsoll/sdk && npm run build -w @plimsoll/web",
+    "dev": "npm run build -w @plimsoll/sdk && npm run dev -w @plimsoll/web",
+    "test": "npm run test -w @plimsoll/sdk",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}
