@@ -22,6 +22,7 @@
 * [For issuers](guides/issuers.md)
 * [For auditors and transcribers](guides/auditors-and-transcribers.md)
 * [For protocol integrators](guides/integrators.md)
+* [Mainnet watch](guides/mainnet-watch.md)
 
 ## Developers
 
