@@ -26,6 +26,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@plimsoll/sdk": [
+        "../../packages/sdk/src/index.ts"
       ]
     }
   },
