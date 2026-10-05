@@ -8,9 +8,9 @@ contributor can finish one in a Wave.
 
 | Repo | Open issues |
 | --- | --- |
-| Contracts | [plimsoll-contracts/issues](https://github.com/dunnidev/plimsoll-contracts/issues) |
-| App and SDK | [plimsoll-app/issues](https://github.com/dunnidev/plimsoll-app/issues) |
-| Indexer | [plimsoll-indexer/issues](https://github.com/dunnidev/plimsoll-indexer/issues) |
+| Contracts | [plimsoll-contracts/issues](https://github.com/plimsoll-protocol/plimsoll-contracts/issues) |
+| App and SDK | [plimsoll-app/issues](https://github.com/plimsoll-protocol/plimsoll-app/issues) |
+| Indexer | [plimsoll-indexer/issues](https://github.com/plimsoll-protocol/plimsoll-indexer/issues) |
 
 Start with `good first issue` if you are new to the codebase.
 

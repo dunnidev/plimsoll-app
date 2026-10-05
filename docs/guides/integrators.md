@@ -49,7 +49,7 @@ ratio, for example.
 ## Test against it locally
 
 Register the real contracts in your tests from the wasm in
-[plimsoll-contracts releases](https://github.com/dunnidev/plimsoll-contracts/releases),
+[plimsoll-contracts releases](https://github.com/plimsoll-protocol/plimsoll-contracts/releases),
 or depend on the crates by git and use `env.register(CoverageLedger, ...)` as
 the `covered-vault` tests do.
 

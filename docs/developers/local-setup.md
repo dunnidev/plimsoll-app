@@ -18,7 +18,7 @@ Postgres for development.
 ## Contracts
 
 ```bash
-git clone https://github.com/dunnidev/plimsoll-contracts && cd plimsoll-contracts
+git clone https://github.com/plimsoll-protocol/plimsoll-contracts && cd plimsoll-contracts
 rustup target add wasm32v1-none
 cargo test               # 53 tests
 stellar contract build   # soroban-sdk 28 requires building through the Stellar CLI
@@ -31,7 +31,7 @@ stellar contract build   # soroban-sdk 28 requires building through the Stellar 
 ## Indexer
 
 ```bash
-git clone https://github.com/dunnidev/plimsoll-indexer && cd plimsoll-indexer
+git clone https://github.com/plimsoll-protocol/plimsoll-indexer && cd plimsoll-indexer
 go run ./cmd/devdb &               # Postgres on localhost:54329
 cp .env.example .env
 set -a; . ./.env; set +a
@@ -44,7 +44,7 @@ Quote `STELLAR_NETWORK_PASSPHRASE` in `.env`: it contains spaces and a `;`.
 ## App
 
 ```bash
-git clone https://github.com/dunnidev/plimsoll-app && cd plimsoll-app
+git clone https://github.com/plimsoll-protocol/plimsoll-app && cd plimsoll-app
 npm install
 echo "NEXT_PUBLIC_INDEXER_URL=http://localhost:8080" > apps/web/.env.local   # optional
 npm run dev                         # http://localhost:3000

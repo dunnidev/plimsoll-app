@@ -6,7 +6,7 @@ nobody else can post at your tier.
 
 ## Before you start
 
-* Your asset is listed. If not, use the [List page](https://dunnidev.github.io/plimsoll-app/list/); anyone can list.
+* Your asset is listed. If not, use the [List page](https://plimsoll-protocol.github.io/plimsoll-app/list/); anyone can list.
 * You can sign with your **issuer account** in Freighter. If the issuer key is
   in cold storage, sign the prepared transaction offline instead (see below).
 * Your statement is published at a stable URL.

@@ -42,5 +42,5 @@ persistent. Every write, and every read of an existing entry, extends the
 entry to 90 days once it has fewer than 30 days left.
 
 The authoritative specification is
-[docs/SPEC.md](https://github.com/dunnidev/plimsoll-contracts/blob/main/docs/SPEC.md)
+[docs/SPEC.md](https://github.com/plimsoll-protocol/plimsoll-contracts/blob/main/docs/SPEC.md)
 in the contracts repo.

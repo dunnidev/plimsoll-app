@@ -3,7 +3,7 @@
 ## Getting registered
 
 Both roles are granted by the registry admin. Open an issue in
-[plimsoll-contracts](https://github.com/dunnidev/plimsoll-contracts/issues)
+[plimsoll-contracts](https://github.com/plimsoll-protocol/plimsoll-contracts/issues)
 with:
 
 * the Stellar account you will sign with,
@@ -25,7 +25,7 @@ Your reports carry the strongest tier. Integrators that require
 
 Post the figure from your attestation, with **As of** set to the attestation
 date, and the URL and hash of the signed document. Use the app's
-[Post a report](https://dunnidev.github.io/plimsoll-app/report/) page; it
+[Post a report](https://plimsoll-protocol.github.io/plimsoll-app/report/) page; it
 shows **Will post as Auditor-signed** once you connect.
 
 ## Transcribers

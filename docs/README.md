@@ -4,8 +4,8 @@ Plimsoll shows how much of a Stellar-issued asset is backed by reserves, who
 signed for those reserves, and how old the figure is. It records both sides on
 Soroban and lets any contract refuse an asset that falls below the line.
 
-* **Live app (testnet):** [dunnidev.github.io/plimsoll-app](https://dunnidev.github.io/plimsoll-app/)
-* **Code:** [contracts](https://github.com/dunnidev/plimsoll-contracts) · [app and SDK](https://github.com/dunnidev/plimsoll-app) · [indexer](https://github.com/dunnidev/plimsoll-indexer)
+* **Live app (testnet):** [plimsoll-protocol.github.io/plimsoll-app](https://plimsoll-protocol.github.io/plimsoll-app/)
+* **Code:** [contracts](https://github.com/plimsoll-protocol/plimsoll-contracts) · [app and SDK](https://github.com/plimsoll-protocol/plimsoll-app) · [indexer](https://github.com/plimsoll-protocol/plimsoll-indexer)
 
 ## The problem
 

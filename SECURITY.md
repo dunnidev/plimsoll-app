@@ -5,7 +5,7 @@ The app and SDK are unaudited and target Stellar testnet.
 ## Reporting
 
 Report privately via
-[Security → Report a vulnerability](https://github.com/dunnidev/plimsoll-app/security/advisories/new).
+[Security → Report a vulnerability](https://github.com/plimsoll-protocol/plimsoll-app/security/advisories/new).
 Include the affected page or SDK function, the impact, and steps to reproduce.
 Do not open public issues for vulnerabilities. We aim to respond within 72 hours.
 

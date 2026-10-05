@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/dunnidev/plimsoll-contracts/main/docs/banner.svg" alt="Plimsoll" width="100%" />
+  <img src="https://raw.githubusercontent.com/plimsoll-protocol/plimsoll-contracts/main/docs/banner.svg" alt="Plimsoll" width="100%" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/dunnidev/plimsoll-app/actions/workflows/ci.yml"><img src="https://github.com/dunnidev/plimsoll-app/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://dunnidev.github.io/plimsoll-app/"><img src="https://img.shields.io/badge/live-testnet-c8341f" alt="Live on testnet" /></a>
+  <a href="https://github.com/plimsoll-protocol/plimsoll-app/actions/workflows/ci.yml"><img src="https://github.com/plimsoll-protocol/plimsoll-app/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://plimsoll-protocol.github.io/plimsoll-app/"><img src="https://img.shields.io/badge/live-testnet-c8341f" alt="Live on testnet" /></a>
   <img src="https://img.shields.io/badge/next.js-16-0f1d2b" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/stellar--sdk-17.2.1-0f1d2b" alt="stellar-sdk 17" />
   <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0" />
@@ -12,24 +12,24 @@
 
 # Plimsoll app
 
-The web app and TypeScript SDK for [Plimsoll](https://github.com/dunnidev/plimsoll-contracts):
+The web app and TypeScript SDK for [Plimsoll](https://github.com/plimsoll-protocol/plimsoll-contracts):
 see how much of every Stellar-issued asset is backed, who signed the reserve
 figure, and how old it is. Issuers and auditors post reports from here;
 anyone can list an asset.
 
-**Live:** https://dunnidev.github.io/plimsoll-app/
+**Live:** https://plimsoll-protocol.github.io/plimsoll-app/
 
 | Repo | What it is |
 | --- | --- |
-| [plimsoll-contracts](https://github.com/dunnidev/plimsoll-contracts) | Rust/Soroban contracts |
+| [plimsoll-contracts](https://github.com/plimsoll-protocol/plimsoll-contracts) | Rust/Soroban contracts |
 | **plimsoll-app** (this repo) | Web app and TypeScript SDK |
-| [plimsoll-indexer](https://github.com/dunnidev/plimsoll-indexer) | Go service: supply poster, event indexer, read API |
+| [plimsoll-indexer](https://github.com/plimsoll-protocol/plimsoll-indexer) | Go service: supply poster, event indexer, read API |
 
 ## Maintainers
 
 | Maintainer | GitHub | Contact |
 | --- | --- | --- |
-| dunnidev | [@dunnidev](https://github.com/dunnidev) | [GitHub Discussions](https://github.com/dunnidev/plimsoll-app/discussions) |
+| dunnidev | [@dunnidev](https://github.com/dunnidev) | [GitHub Discussions](https://github.com/plimsoll-protocol/plimsoll-app/discussions) |
 
 ## Layout
 
@@ -57,7 +57,7 @@ Because it is a static export, it runs on any static host.
 Node 22.12 or later.
 
 ```bash
-git clone https://github.com/dunnidev/plimsoll-app
+git clone https://github.com/plimsoll-protocol/plimsoll-app
 cd plimsoll-app
 npm install
 npm run dev        # builds the SDK, then serves http://localhost:3000
@@ -105,8 +105,8 @@ open one pull request per change. Security: [SECURITY.md](SECURITY.md).
 
 ## Contributors
 
-<a href="https://github.com/dunnidev/plimsoll-app/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=dunnidev/plimsoll-app" alt="Contributors" />
+<a href="https://github.com/plimsoll-protocol/plimsoll-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=plimsoll-protocol/plimsoll-app" alt="Contributors" />
 </a>
 
 ## License
