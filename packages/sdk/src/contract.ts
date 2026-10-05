@@ -1,0 +1,263 @@
+import {
+  Account,
+  Address,
+  Asset,
+  BASE_FEE,
+  Contract,
+  Keypair,
+  Operation,
+  TransactionBuilder,
+  nativeToScVal,
+  rpc,
+  scValToNative,
+  xdr,
+} from "@stellar/stellar-sdk";
+import { Buffer } from "buffer";
+import type {
+  AssetRecord,
+  Coverage,
+  NetworkConfig,
+  ReporterInfo,
+  ReserveReport,
+  Role,
+  SupplySnapshot,
+  Tier,
+} from "./types.js";
+
+// Read-only simulations need a syntactically valid source; it is never funded
+// or used to sign.
+const READ_SOURCE = Keypair.random().publicKey();
+
+/** Thrown when a contract call fails in simulation (e.g. a contract error). */
+export class ContractCallError extends Error {
+  constructor(
+    readonly method: string,
+    readonly detail: string,
+  ) {
+    super(`${method} failed: ${detail}`);
+    this.name = "ContractCallError";
+  }
+}
+
+/** The SAC address of a classic asset on a given network. */
+export function sacAddress(code: string, issuer: string, networkPassphrase: string): string {
+  return new Asset(code, issuer).contractId(networkPassphrase);
+}
+
+const addr = (a: string) => new Address(a).toScVal();
+const u32 = (n: number) => nativeToScVal(n, { type: "u32" });
+const u64 = (n: number | bigint) => nativeToScVal(BigInt(n), { type: "u64" });
+const i128 = (n: bigint) => nativeToScVal(n, { type: "i128" });
+const str = (s: string) => nativeToScVal(s, { type: "string" });
+
+/** 64-char hex → BytesN<32>. */
+export function bytes32(hex: string): xdr.ScVal {
+  if (!/^[0-9a-fA-F]{64}$/.test(hex)) throw new Error("Expected a 32-byte hex hash");
+  return xdr.ScVal.scvBytes(Buffer.from(hex, "hex"));
+}
+
+function toHex(v: unknown): string {
+  if (v instanceof Uint8Array) return Buffer.from(v).toString("hex");
+  throw new Error("Expected bytes");
+}
+
+const num = (v: unknown): number => Number(v);
+const big = (v: unknown): bigint => BigInt(v as bigint | number | string);
+
+// ---- decoders: scValToNative output → typed objects ------------------------
+
+type Raw = Record<string, unknown>;
+
+export function decodeAsset(raw: Raw): AssetRecord {
+  return {
+    sac: String(raw.sac),
+    code: String(raw.code),
+    issuer: String(raw.issuer),
+    listedAt: num(raw.listed_at),
+  };
+}
+
+export function decodeSupply(raw: Raw): SupplySnapshot {
+  return {
+    amount: big(raw.amount),
+    ledger: num(raw.ledger),
+    timestamp: num(raw.timestamp),
+    breakdownHash: toHex(raw.breakdown_hash),
+    poster: String(raw.poster),
+  };
+}
+
+export function decodeReport(raw: Raw): ReserveReport {
+  return {
+    amount: big(raw.amount),
+    asOf: num(raw.as_of),
+    postedAt: num(raw.posted_at),
+    tier: num(raw.tier) as Tier,
+    reporter: String(raw.reporter),
+    docHash: toHex(raw.doc_hash),
+    docUri: String(raw.doc_uri),
+  };
+}
+
+export function decodeCoverage(raw: Raw): Coverage {
+  return {
+    bps: num(raw.bps),
+    supply: big(raw.supply),
+    reserves: big(raw.reserves),
+    tier: num(raw.tier) as Tier,
+    supplyLedger: num(raw.supply_ledger),
+    supplyTimestamp: num(raw.supply_timestamp),
+    reportAsOf: num(raw.report_as_of),
+  };
+}
+
+export function decodeReporter(raw: Raw): ReporterInfo {
+  return { role: num(raw.role) as Role, name: String(raw.name), addedAt: num(raw.added_at) };
+}
+
+function opt<T>(v: unknown, decode: (r: Raw) => T): T | null {
+  return v == null ? null : decode(v as Raw);
+}
+
+// ---- client ----------------------------------------------------------------
+
+export interface ReservePostArgs {
+  reporter: string;
+  sac: string;
+  /** Smallest units. */
+  amount: bigint;
+  /** Unix seconds. */
+  asOf: number;
+  docHash: string;
+  docUri: string;
+}
+
+/**
+ * Reads the Plimsoll contracts through RPC simulation and builds prepared
+ * transactions for the write calls. Signing is left to the caller's wallet.
+ */
+export class PlimsollContracts {
+  readonly server: rpc.Server;
+  readonly ledger: Contract;
+  readonly registry: Contract;
+
+  constructor(readonly config: NetworkConfig) {
+    this.server = new rpc.Server(config.rpcUrl, {
+      allowHttp: config.rpcUrl.startsWith("http://"),
+    });
+    this.ledger = new Contract(config.coverageLedgerId);
+    this.registry = new Contract(config.reporterRegistryId);
+  }
+
+  // -- reads --
+
+  async getAsset(sac: string): Promise<AssetRecord | null> {
+    return opt(await this.read(this.ledger, "get_asset", [addr(sac)]), decodeAsset);
+  }
+
+  async getSupply(sac: string): Promise<SupplySnapshot | null> {
+    return opt(await this.read(this.ledger, "get_supply", [addr(sac)]), decodeSupply);
+  }
+
+  async getReport(sac: string, tier: Tier): Promise<ReserveReport | null> {
+    return opt(await this.read(this.ledger, "get_report", [addr(sac), u32(tier)]), decodeReport);
+  }
+
+  async coverage(sac: string, minTier: Tier): Promise<Coverage | null> {
+    return opt(await this.read(this.ledger, "coverage", [addr(sac), u32(minTier)]), decodeCoverage);
+  }
+
+  async isCovered(sac: string, minBps: number, maxAgeSeconds: number, minTier: Tier): Promise<boolean> {
+    const v = await this.read(this.ledger, "is_covered", [
+      addr(sac),
+      u32(minBps),
+      u64(maxAgeSeconds),
+      u32(minTier),
+    ]);
+    return v === true;
+  }
+
+  async getReporter(address: string): Promise<ReporterInfo | null> {
+    return opt(await this.read(this.registry, "get_reporter", [addr(address)]), decodeReporter);
+  }
+
+  // -- writes: return prepared, unsigned transaction XDR --
+
+  /** List a classic asset by SAC address. Anyone may call it. */
+  async prepareListAsset(source: string, sac: string): Promise<string> {
+    return this.prepare(source, this.ledger.call("list_asset", addr(sac)));
+  }
+
+  /** Deploy the SAC for a classic asset (needed once per asset per network). */
+  async prepareDeploySac(source: string, code: string, issuer: string): Promise<string> {
+    return this.prepare(
+      source,
+      Operation.createStellarAssetContract({ asset: new Asset(code, issuer) }),
+    );
+  }
+
+  /** Post a reserve figure. The reporter must be the transaction source. */
+  async preparePostReserve(a: ReservePostArgs): Promise<string> {
+    return this.prepare(
+      a.reporter,
+      this.ledger.call(
+        "post_reserve",
+        addr(a.reporter),
+        addr(a.sac),
+        i128(a.amount),
+        u64(a.asOf),
+        bytes32(a.docHash),
+        str(a.docUri),
+      ),
+    );
+  }
+
+  /** Submit a signed transaction and wait for it to land. Returns the hash. */
+  async submit(signedXdr: string): Promise<string> {
+    const tx = TransactionBuilder.fromXDR(signedXdr, this.config.networkPassphrase);
+    const sent = await this.server.sendTransaction(tx);
+    if (sent.status === "ERROR" || sent.status === "TRY_AGAIN_LATER") {
+      throw new ContractCallError("submit", `status ${sent.status}`);
+    }
+    const final = await this.server.pollTransaction(sent.hash, { attempts: 30 });
+    if (final.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
+      throw new ContractCallError("submit", `transaction ${sent.hash} ${final.status}`);
+    }
+    return sent.hash;
+  }
+
+  // -- internals --
+
+  private async read(contract: Contract, method: string, args: xdr.ScVal[]): Promise<unknown> {
+    const tx = new TransactionBuilder(new Account(READ_SOURCE, "0"), {
+      fee: BASE_FEE,
+      networkPassphrase: this.config.networkPassphrase,
+    })
+      .addOperation(contract.call(method, ...args))
+      .setTimeout(30)
+      .build();
+    const sim = await this.server.simulateTransaction(tx);
+    if (rpc.Api.isSimulationError(sim)) {
+      throw new ContractCallError(method, sim.error);
+    }
+    const retval = sim.result?.retval;
+    return retval ? scValToNative(retval) : null;
+  }
+
+  private async prepare(source: string, op: xdr.Operation): Promise<string> {
+    const account = await this.server.getAccount(source);
+    const tx = new TransactionBuilder(account, {
+      fee: BASE_FEE,
+      networkPassphrase: this.config.networkPassphrase,
+    })
+      .addOperation(op)
+      .setTimeout(300)
+      .build();
+    try {
+      const prepared = await this.server.prepareTransaction(tx);
+      return prepared.toXDR();
+    } catch (err) {
+      throw new ContractCallError("prepare", err instanceof Error ? err.message : String(err));
+    }
+  }
+}
