@@ -38,8 +38,9 @@ Two things stand out:
 
 ## Why some issuers are listed and others are not
 
-Many asset codes on Stellar have look-alike tokens from other issuers. Some
-"USDC" and "PYUSD" tokens from unrelated accounts claim trillions of units.
+Many asset codes on Stellar have look-alike tokens from other issuers. On 5 October 2026 a
+"USDC" from an unrelated account claimed about 169 trillion units and a
+look-alike "PYUSD" about 15 billion.
 The page lists each asset by the issuer account that holds nearly all real
 holders, and checks that issuer's own stellar.toml live. It is the same
 problem the coverage ledger's `list_asset` solves on-chain by reading
