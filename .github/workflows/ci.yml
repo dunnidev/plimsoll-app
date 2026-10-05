@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build SDK
+        run: npm run build -w @plimsoll/sdk
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test SDK (including live testnet reads)
+        run: npm test
+        env:
+          PLIMSOLL_LIVE: "1"
+      - name: Build web
+        run: npm run build -w @plimsoll/web
