@@ -48,13 +48,13 @@ export function Footer() {
           <a href={explorer.contract(config.network.coverageLedgerId)} target="_blank" rel="noreferrer">
             Coverage ledger
           </a>
-          <a href="https://github.com/dunnidev/plimsoll-contracts" target="_blank" rel="noreferrer">
+          <a href="https://github.com/plimsoll-protocol/plimsoll-contracts" target="_blank" rel="noreferrer">
             Contracts
           </a>
-          <a href="https://github.com/dunnidev/plimsoll-app" target="_blank" rel="noreferrer">
+          <a href="https://github.com/plimsoll-protocol/plimsoll-app" target="_blank" rel="noreferrer">
             App
           </a>
-          <a href="https://github.com/dunnidev/plimsoll-indexer" target="_blank" rel="noreferrer">
+          <a href="https://github.com/plimsoll-protocol/plimsoll-indexer" target="_blank" rel="noreferrer">
             Indexer
           </a>
         </span>

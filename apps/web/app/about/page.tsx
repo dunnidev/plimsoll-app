@@ -68,7 +68,7 @@ export default function AboutPage() {
 
       <p className="mt">
         <Link href="/integrate/">Integration guide</Link> ·{" "}
-        <a href="https://github.com/dunnidev/plimsoll-contracts/blob/main/docs/SPEC.md">Contract specification</a>
+        <a href="https://github.com/plimsoll-protocol/plimsoll-contracts/blob/main/docs/SPEC.md">Contract specification</a>
       </p>
     </article>
   );

@@ -71,7 +71,7 @@ export default function IntegratePage() {
       <h2>From a Soroban contract</h2>
       <pre><code>{rust}</code></pre>
       <p className="sub">
-        A working example is the <a href="https://github.com/dunnidev/plimsoll-contracts/tree/main/contracts/covered-vault">covered-vault</a> contract:
+        A working example is the <a href="https://github.com/plimsoll-protocol/plimsoll-contracts/tree/main/contracts/covered-vault">covered-vault</a> contract:
         deposits are refused while the asset is not covered; withdrawals never are.
       </p>
 
