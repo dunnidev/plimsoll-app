@@ -1,4 +1,4 @@
-import type { NetworkConfig } from "./types.js";
+import type { NetworkConfig } from "./types";
 
 /** The v0.1 testnet deployment (plimsoll-contracts/deployments/testnet.json). */
 export const TESTNET: NetworkConfig & {

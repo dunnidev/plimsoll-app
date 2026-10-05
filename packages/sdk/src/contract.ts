@@ -22,7 +22,7 @@ import type {
   Role,
   SupplySnapshot,
   Tier,
-} from "./types.js";
+} from "./types";
 
 // Read-only simulations need a syntactically valid source; it is never funded
 // or used to sign.

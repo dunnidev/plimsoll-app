@@ -22,7 +22,7 @@ import {
   shortAddress,
   tierFromName,
   tierLabel,
-} from "../src/index.js";
+} from "../src/index";
 
 describe("format", () => {
   it("formats smallest units", () => {

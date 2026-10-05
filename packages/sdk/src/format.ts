@@ -1,4 +1,4 @@
-import { NOTHING_OWED_BPS, Role, Tier } from "./types.js";
+import { NOTHING_OWED_BPS, Role, Tier } from "./types";
 
 export const CLASSIC_DECIMALS = 7;
 
