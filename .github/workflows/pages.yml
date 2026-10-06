@@ -61,3 +61,13 @@ jobs:
             [ "$code" = 200 ] || exit 1
             grep -q "Plimsoll" page.html || { echo "missing content"; exit 1; }
           done
+
+      - name: Check the demo issuer's stellar.toml is readable cross-origin
+        run: |
+          url="https://${{ github.repository_owner }}.github.io/.well-known/stellar.toml"
+          headers=$(curl -sSI "$url")
+          echo "$headers" | grep -i '^access-control-allow-origin: \*' \
+            || { echo "::error::$url lacks Access-Control-Allow-Origin: * (required by SEP-1)"; exit 1; }
+          curl -sS "$url" | grep -q 'code = "PUSD"' \
+            || { echo "::error::$url does not list PUSD"; exit 1; }
+          echo "stellar.toml OK: CORS header present and PUSD listed"
