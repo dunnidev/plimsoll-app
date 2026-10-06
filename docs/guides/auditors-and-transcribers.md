@@ -25,7 +25,7 @@ Your reports carry the strongest tier. Integrators that require
 
 Post the figure from your attestation, with **As of** set to the attestation
 date, and the URL and hash of the signed document. Use the app's
-[Post a report](https://plimsoll-protocol.github.io/plimsoll-app/report/) page; it
+[Post a report](https://plimsoll-app-gths-amber.vercel.app/report/) page; it
 shows **Will post as Auditor-signed** once you connect.
 
 ## Transcribers

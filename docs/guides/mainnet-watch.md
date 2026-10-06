@@ -1,6 +1,6 @@
 # Mainnet watch
 
-The [Mainnet watch](https://plimsoll-protocol.github.io/plimsoll-app/mainnet/)
+The [Mainnet watch](https://plimsoll-app-gths-amber.vercel.app/mainnet/)
 page runs the supply half of Plimsoll against real assets on Stellar mainnet,
 live, in your browser. It needs no contracts and no indexer: it reads mainnet
 Horizon directly and counts supply with the same rule the indexer posts

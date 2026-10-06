@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/plimsoll-protocol/plimsoll-app/actions/workflows/ci.yml"><img src="https://github.com/plimsoll-protocol/plimsoll-app/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://plimsoll-protocol.github.io/plimsoll-app/"><img src="https://img.shields.io/badge/live-testnet-c8341f" alt="Live on testnet" /></a>
+  <a href="https://plimsoll-app-gths-amber.vercel.app/"><img src="https://img.shields.io/badge/live-testnet-c8341f" alt="Live on testnet" /></a>
   <img src="https://img.shields.io/badge/next.js-16-0f1d2b" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/stellar--sdk-17.2.1-0f1d2b" alt="stellar-sdk 17" />
   <a href="https://plimsoll-protocol.gitbook.io/plimsoll-protocol-docs/"><img src="https://img.shields.io/badge/docs-gitbook-0f1d2b" alt="Docs" /></a>
@@ -18,7 +18,8 @@ see how much of every Stellar-issued asset is backed, who signed the reserve
 figure, and how old it is. Issuers and auditors post reports from here;
 anyone can list an asset.
 
-**Live:** https://plimsoll-protocol.github.io/plimsoll-app/  
+**Live:** https://plimsoll-app-gths-amber.vercel.app/  
+**Mirror:** https://plimsoll-protocol.github.io/plimsoll-app/  
 **Docs:** https://plimsoll-protocol.gitbook.io/plimsoll-protocol-docs/
 
 | Repo | What it is |

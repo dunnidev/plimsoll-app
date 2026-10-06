@@ -5,7 +5,7 @@ whether it is backed, according to whom, and how recently.
 
 ## Read an asset in 30 seconds
 
-1. Open the [app](https://plimsoll-protocol.github.io/plimsoll-app/) and find the asset.
+1. Open the [app](https://plimsoll-app-gths-amber.vercel.app/) and find the asset.
 2. Read the three things on its card:
    * **The ratio.** 100% or more means reported reserves cover everything in circulation.
    * **The status.** *Fully backed*, *Under-backed*, *Report stale* (older than 31 days) or *No data*.
