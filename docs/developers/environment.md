@@ -39,6 +39,8 @@ build. Changing them after the build has no effect, because the site is static.
 | `TOML_INTERVAL` | no | `6h` | Refresh each issuer's stellar.toml after this long |
 | `CORS_ORIGINS` | no | `*` | Comma-separated allowed origins |
 | `LOG_LEVEL` | no | `info` | `debug`, `info`, `warn`, `error` |
+| `KEEP_AWAKE_URL` | no | `$RENDER_EXTERNAL_URL/healthz` on Render, else off | URL requested every interval so the host does not sleep the service; `none` turns it off |
+| `KEEP_AWAKE_INTERVAL` | no | `10m` | How often to request it |
 
 ## Contracts
 
