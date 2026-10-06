@@ -6,6 +6,8 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import {
   Tier,
   ago,
+  checkStellarToml,
+  fetchHomeDomain,
   bpsToPercent,
   formatUnits,
   matchesHash,
@@ -14,6 +16,7 @@ import {
   shortAddress,
   tierLabel,
   type SupplyBreakdown,
+  type TomlCheck,
 } from "@plimsoll/sdk";
 import { Gauge, Skeleton, Stat, StatusPill, TierPill, nowSecs, ratioText, statusOf } from "@/components/ui";
 import { config, explorer } from "@/lib/config";
@@ -170,39 +173,7 @@ function AssetDetail() {
       {asset.supply ? <SupplySection hash={asset.supply.breakdownHash} poster={asset.supply.poster} /> : null}
 
       <h2>What the issuer publishes</h2>
-      {asset.toml ? (
-        <div className="card">
-          <p>
-            From <code>https://{asset.toml.home_domain}/.well-known/stellar.toml</code> (SEP-1).
-          </p>
-          {asset.toml.currency ? (
-            <ul>
-              {asset.toml.currency.name ? <li>Name: {asset.toml.currency.name}</li> : null}
-              <li>
-                Anchored: {asset.toml.currency.is_asset_anchored ? `yes, to ${asset.toml.currency.anchor_asset ?? "an off-chain asset"}` : "not stated"}
-              </li>
-              <li>
-                Reserve attestation link:{" "}
-                {asset.toml.currency.attestation_of_reserve ? (
-                  <a href={asset.toml.currency.attestation_of_reserve} target="_blank" rel="noreferrer">
-                    {asset.toml.currency.attestation_of_reserve}
-                  </a>
-                ) : (
-                  "not published"
-                )}
-              </li>
-            </ul>
-          ) : (
-            <p className="sub">The stellar.toml does not list this asset under [[CURRENCIES]].</p>
-          )}
-        </div>
-      ) : (
-        <p className="sub">
-          {asset.source === "chain"
-            ? "stellar.toml data comes from the indexer, which this deployment is not using."
-            : "The issuer has no home_domain set, or its stellar.toml could not be read."}
-        </p>
-      )}
+      <IssuerToml asset={asset} />
     </>
   );
 }
@@ -353,5 +324,82 @@ function SupplySection({ hash, poster }: { hash: string; poster: string }) {
         </p>
       ) : null}
     </>
+  );
+}
+
+/**
+ * The issuer's SEP-1 stellar.toml entry for this asset. Uses the indexer's
+ * copy when it confirms the asset; otherwise checks live from the browser,
+ * so a newly published file shows up without waiting for the indexer.
+ */
+function IssuerToml({ asset }: { asset: AssetView }) {
+  const cached = asset.toml?.currency ? asset.toml : null;
+  const [live, setLive] = useState<{ domain: string; check: TomlCheck } | null>(null);
+
+  useEffect(() => {
+    if (cached || !config.network.horizonUrl) return;
+    let cancelled = false;
+    fetchHomeDomain(config.network.horizonUrl, asset.issuer)
+      .then(async (domain) => {
+        const check = await checkStellarToml(domain, asset.code, asset.issuer);
+        if (!cancelled) setLive({ domain, check });
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) setLive({ domain: "", check: { status: "unreachable", detail: e instanceof Error ? e.message : String(e) } });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [cached, asset.issuer, asset.code]);
+
+  const domain = cached?.home_domain ?? live?.domain ?? "";
+  const currency = cached?.currency ?? (live?.check.status === "confirmed" ? live.check.currency : undefined);
+  const orgName = cached?.org_name ?? live?.check.orgName;
+
+  if (!cached && !live) return <p className="sub">Checking the issuer&apos;s home domain…</p>;
+
+  if (!currency) {
+    const reason: Record<TomlCheck["status"], string> = {
+      confirmed: "",
+      "no-domain": "The issuer account has no home_domain set, so it publishes no stellar.toml.",
+      "not-found": `${domain} has no /.well-known/stellar.toml (404).`,
+      "not-listed": `The stellar.toml at ${domain} does not list this code and issuer under [[CURRENCIES]].`,
+      invalid: `The stellar.toml at ${domain} does not parse as TOML.`,
+      unreachable: `The stellar.toml at ${domain} could not be loaded from your browser.`,
+    };
+    return <p className="sub">{reason[live?.check.status ?? "unreachable"]}</p>;
+  }
+
+  const url = `https://${domain}/.well-known/stellar.toml`;
+  return (
+    <div className="card">
+      <p>
+        From{" "}
+        <a href={url} target="_blank" rel="noreferrer">
+          <code>{url}</code>
+        </a>{" "}
+        (SEP-1){orgName ? <>, published by {orgName}</> : null}.{" "}
+        <span className="pill pill-covered">Confirms this issuer</span>
+      </p>
+      <ul>
+        {currency.name ? <li>Name: {currency.name}</li> : null}
+        <li>
+          Anchored: {currency.is_asset_anchored ? `yes, to ${currency.anchor_asset ?? "an off-chain asset"}` : "not stated"}
+        </li>
+        <li>
+          Reserve attestation link:{" "}
+          {currency.attestation_of_reserve ? (
+            <a href={currency.attestation_of_reserve} target="_blank" rel="noreferrer">
+              {currency.attestation_of_reserve}
+            </a>
+          ) : (
+            "not published"
+          )}
+        </li>
+      </ul>
+      <p className="sub" style={{ margin: 0 }}>
+        {cached ? "Read by the Plimsoll indexer." : "Checked live from your browser."}
+      </p>
+    </div>
   );
 }
