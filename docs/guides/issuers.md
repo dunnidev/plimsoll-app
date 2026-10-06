@@ -53,6 +53,20 @@ anchor_asset = "USD"
 attestation_of_reserve = "https://example.com/reserves/latest.pdf"
 ```
 
+A working example is the testnet demo issuer's file at
+[plimsoll-protocol.github.io/.well-known/stellar.toml](https://plimsoll-protocol.github.io/.well-known/stellar.toml).
+Its issuer account's `home_domain` is set to `plimsoll-protocol.github.io`
+([transaction](https://stellar.expert/explorer/testnet/tx/99b286676f578c6e2e87bb61c428808ea791b55e121efafaad1934717801cba4)),
+and the PUSD asset page reads it live.
+
+Two details that break this for many issuers:
+
+* The file must be served with `Access-Control-Allow-Origin: *`, or browsers
+  cannot read it.
+* It must be at the exact `home_domain` set on the issuer account. Redirecting
+  to another host (for example `example.com` → `www.example.com`) often drops
+  the CORS header.
+
 ## Cadence
 
 Post each time you publish a statement. Integrators typically require a report
