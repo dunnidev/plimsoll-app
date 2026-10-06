@@ -147,7 +147,10 @@ export async function loadFromChain(sac: string): Promise<AssetView | null> {
 export async function loadAssets(): Promise<AssetView[]> {
   if (indexer) {
     try {
-      return (await indexer.listAssets()).map(fromIndexer);
+      const listed = await indexer.listAssets();
+      // An empty list from a freshly rebuilt indexer is not proof that nothing
+      // is listed on-chain; fall through to the contracts.
+      if (listed.length > 0) return listed.map(fromIndexer);
     } catch (err) {
       console.warn("Indexer unavailable, reading from chain", err);
     }
