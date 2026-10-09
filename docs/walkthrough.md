@@ -9,9 +9,11 @@ on the live app; the screenshots were taken from it on 7 October 2026.
 
 Open the [dashboard](https://plimsoll-app-gths-amber.vercel.app/). Each listed
 asset shows its coverage ratio, who signed the reserve figure, and how old it is.
-The demo asset PUSD reads **102.00%**, issuer-signed. Testnet USDC is listed
-and its supply is tracked, but no one has posted reserves for it, so it reads
-"No data". Plimsoll never guesses.
+Three listed assets show the three outcomes. PUSD reads **102.00%**,
+issuer-signed. QUSD reads **96.00%**: it is under-backed, and its figure was
+copied from a published statement by a registered transcriber, the lowest tier.
+Testnet USDC is listed and its supply is tracked, but no one has posted
+reserves for it, so it reads "No data". Plimsoll never guesses.
 
 ![Dashboard](walkthrough/1-dashboard.png)
 
@@ -33,7 +35,26 @@ Everything on this page can be verified without trusting Plimsoll:
 
 ![PUSD asset page](walkthrough/2-asset-pusd.png)
 
-## 3. See the problem on mainnet, today
+## 3. Watch a contract refuse an under-backed asset
+
+Open [QUSD](https://plimsoll-app-gths-amber.vercel.app/asset/?sac=CBSQEFG73RMUVEZ56EFEBCJ23WZNF6FFYXEAJKYG6SZCLKDZ5B2YXGHS).
+Its 500,000 units are backed by 480,000 in reserves, so coverage is 96% and
+`is_covered(QUSD, 100%, 31 days, any tier)` returns **false**. A second example
+vault accepts only fully backed assets, so it refuses a real deposit:
+
+```bash
+stellar contract invoke --network testnet --source <any-QUSD-holder>   --id CBURLBHWLWOTKJ5NVF574NAYFM7Y25JB366ZDO7WGJXCVC4C72UVKTO5 --   deposit --from <holder> --amount 1000000000
+# error: HostError: Error(Contract, #2)   <- NotCovered: the vault refused QUSD
+```
+
+Nothing is transferred; the holder keeps their QUSD. The same call against the
+PUSD vault succeeds ([transaction](https://stellar.expert/explorer/testnet/tx/f86eecaa2eb6252bd4e79708966fc510573b8a9878771641b8f8b514d2804b5b)).
+The whole demo is reproducible with
+[`scripts/seed-underbacked-demo.sh`](https://github.com/plimsoll-protocol/plimsoll-contracts/blob/main/scripts/seed-underbacked-demo.sh).
+
+![QUSD asset page](walkthrough/2b-asset-qusd.png)
+
+## 4. See the problem on mainnet, today
 
 Open [Mainnet watch](https://plimsoll-app-gths-amber.vercel.app/mainnet/). It
 reads five real assets (USDC, EURC, PYUSD, USDGLO, BENJI) live from mainnet
@@ -45,7 +66,7 @@ Plimsoll fills.
 
 ![Mainnet watch](walkthrough/3-mainnet-watch.png)
 
-## 4. See how a protocol uses it
+## 5. See how a protocol uses it
 
 Open [Integrate](https://plimsoll-app-gths-amber.vercel.app/integrate/). One
 cross-contract call, `is_covered(asset, min_bps, max_age, min_tier)`, lets a
@@ -57,7 +78,7 @@ never blocked
 
 ![Integrate page](walkthrough/4-integrate.png)
 
-## 5. Verify from the command line
+## 6. Verify from the command line
 
 Same answer, straight from the contract:
 
@@ -81,4 +102,5 @@ And the indexer's live API:
 | Supply posted by the indexer | [c3ae90c4…](https://stellar.expert/explorer/testnet/tx/c3ae90c40b1dbf0575e0e9babaefd9ae20dee457fb5b37d2d40105f005f6b81b) |
 | Issuer-signed reserve report (7 Oct) | [e0b4df27…](https://stellar.expert/explorer/testnet/tx/e0b4df27bae257a8360a4a62d2efd4a770243faab7673c4d6737305fe548312c) |
 | Issuer sets its SEP-1 home domain | [99b28667…](https://stellar.expert/explorer/testnet/tx/99b286676f578c6e2e87bb61c428808ea791b55e121efafaad1934717801cba4) |
+| QUSD reserves posted by a transcriber (96%) | [1578741c…](https://stellar.expert/explorer/testnet/tx/1578741c9e185f8ecd276c9ee35f56de6f992ac26a3ebe997066092a1a01c9af) |
 | Vault deposit gated by `is_covered` | [f86eecaa…](https://stellar.expert/explorer/testnet/tx/f86eecaa2eb6252bd4e79708966fc510573b8a9878771641b8f8b514d2804b5b) |
