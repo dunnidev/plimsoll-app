@@ -174,6 +174,15 @@ describe.skipIf(!process.env.PLIMSOLL_LIVE)("live testnet", () => {
     expect(await client.isCovered(pusd, 0, 10 * 365 * 86_400, Tier.Transcribed)).toBe(true);
   });
 
+  it("reports the under-backed QUSD demo as not covered", async () => {
+    const qusd = TESTNET.assets.QUSD!.sac;
+    const cov = await client.coverage(qusd, Tier.Transcribed);
+    expect(cov).not.toBeNull();
+    expect(cov!.bps).toBeLessThan(10_000);
+    expect(cov!.tier).toBe(Tier.Transcribed);
+    expect(await client.isCovered(qusd, 10_000, 10 * 365 * 86_400, Tier.Transcribed)).toBe(false);
+  });
+
   it("knows the registered supply poster", async () => {
     const info = await client.getReporter("GDACI55IMI5DDZWMZ2EAXWK57AV75VE4626YYBAHQJYDV7QFPNNFK6HJ");
     expect(info?.name).toBe("Plimsoll indexer");
